@@ -1,31 +1,32 @@
 #!/bin/bash
-#REPO_PATH=asseco/skalk
-#REPO_PATH=nKrop/ec
-REPO_PATH=Ostar/PoolDisp
+REPO_PATH=/work/oldsvns/svnrepos/old-nkrop
+#PROJECT=asseco/skalk
+#PROJECT=nKrop/ec
+PROJECT=Ostar/PoolDisp
 
 rm -rf ./git
 mkdir -p ./git
 cd ./git
 
 cat <<EOF > tmprules
-create repository $REPO_PATH
+create repository $PROJECT
 end repository
 
 # Note: rules must end in a slash
 
-match /$REPO_PATH/trunk/
-  repository $REPO_PATH
+match /$PROJECT/trunk/
+  repository $PROJECT
   branch master
 end match
 
-match /$REPO_PATH/branches/([^/]+)/
-  repository $REPO_PATH
+match /$PROJECT/branches/([^/]+)/
+  repository $PROJECT
   branch \1
   substitute branch s/ /_/
 end match
 
-match /$REPO_PATH/tags/([^/]+)/
-  repository $REPO_PATH
+match /$PROJECT/tags/([^/]+)/
+  repository $PROJECT
   branch tag_\1
   substitute branch s/ /_/
 end match
@@ -35,9 +36,9 @@ match .*
 end match
 EOF
 
-svn-all-fast-export /work/oldsvns/svnrepos/old-nkrop --svn-ignore --stats --propcheck --rules tmprules
+svn-all-fast-export $REPO_PATH --svn-ignore --stats --propcheck --rules tmprules
 
-git clone $REPO_PATH repo
+git clone $PROJECT repo
 cd repo
 
 (IFS='
